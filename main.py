@@ -1,24 +1,16 @@
 import os
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
-from dotenv import load_dotenv  # pip install python-dotenv
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-# .env faylni yuklash
-load_dotenv()
-API_TOKEN = os.getenv("API_TOKEN")  # tokenni o'qish
+TOKEN = os.getenv("BOT_TOKEN")
 
-def start(update: Update, context: CallbackContext):
-    update.message.reply_text("Salom! Men ishlayapman 🚀")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Bot ishlayapti 🚀")
 
 def main():
-    updater = Updater(token=API_TOKEN, use_context=True)
-    dispatcher = updater.dispatcher
-
-    dispatcher.add_handler(CommandHandler("start", start))
-
-    updater.start_polling()
-    print("Bot ishga tushdi...")
-    updater.idle()
+    app = ApplicationBuilder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.run_polling()
 
 if __name__ == "__main__":
     main()
